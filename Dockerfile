@@ -21,5 +21,11 @@ RUN composer install --no-dev --optimize-autoloader
 # 権限の設定
 RUN chown -R www-data:www-data /var/www/docker_php_test/storage /var/www/docker_php_test/bootstrap/cache
 
-# PHP-FPMを起動する
-CMD ["php-fpm"]
+# NginxとPHP-FPMを起動するスクリプトをコピー
+COPY ./start.sh /usr/local/bin/start.sh
+
+# スクリプトに実行権限を付与
+RUN chmod +x /usr/local/bin/start.sh
+
+# NginxとPHP-FPMを起動
+CMD ["/usr/local/bin/start.sh"]
