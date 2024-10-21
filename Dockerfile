@@ -12,14 +12,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # プロジェクトファイルをコンテナにコピー
 COPY . /var/www
 
-# 作業ディレクトリを設定
-WORKDIR /var/www
+# 作業ディレクトリをLaravelのルートに設定
+WORKDIR /var/www/docker_php_test
 
 # Composerの依存関係をインストール
 RUN composer install --no-dev --optimize-autoloader
 
 # 権限の設定
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/docker_php_test/storage /var/www/docker_php_test/bootstrap/cache
 
 # PHP-FPMを起動する
 CMD ["php-fpm"]
