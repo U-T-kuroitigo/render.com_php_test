@@ -1,0 +1,25 @@
+# PHP 8.2をベースとした公式PHP-FPMイメージを使用
+FROM php:8.2-fpm
+
+# 必要なパッケージをインストール
+RUN apt-get update && apt-get install -y \
+  zip unzip git curl libpng-dev libjpeg-dev libpq-dev \
+  && docker-php-ext-install pdo pdo_mysql pdo_pgsql gd
+
+# Composerをインストール
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# プロジェクトファイルをコンテナにコピー
+COPY . /var/www
+
+# 作業ディレクトリを設定
+WORKDIR /var/www
+
+# Composerの依存関係をインストール
+RUN composer install --no-dev --optimize-autoloader
+
+# 権限の設定
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+# PHP-FPMを起動する
+CMD ["php-fpm"]
