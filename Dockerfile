@@ -3,7 +3,7 @@ FROM php:8.2-fpm
 
 # 必要なパッケージをインストール
 RUN apt-get update && apt-get install -y \
-  zip unzip git curl libpng-dev libjpeg-dev libpq-dev \
+  zip unzip git curl libpng-dev libjpeg-dev libpq-dev nginx \
   && docker-php-ext-install pdo pdo_mysql pdo_pgsql gd
 
 # Composerをインストール
@@ -26,6 +26,9 @@ COPY ./start.sh /usr/local/bin/start.sh
 
 # スクリプトに実行権限を付与
 RUN chmod +x /usr/local/bin/start.sh
+
+# Nginxのデフォルト設定を削除（nginx.confを使うため）
+RUN rm /etc/nginx/sites-enabled/default
 
 # NginxとPHP-FPMを起動
 CMD ["/usr/local/bin/start.sh"]
