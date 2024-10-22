@@ -29,6 +29,7 @@ RUN chmod +x /usr/local/bin/start.sh
 
 # Nginxのデフォルト設定を削除（nginx.confを使うため）
 RUN rm /etc/nginx/sites-enabled/default
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 # NginxとPHP-FPMを起動
 CMD ["/usr/local/bin/start.sh"]
